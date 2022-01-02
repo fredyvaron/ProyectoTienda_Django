@@ -1,0 +1,11 @@
+.nav-item:hover {
+    background-color: darkgrey !important;
+}
+
+a.dropdown-item:hover {
+    background-color: gainsboro !important;
+}
+
+body {
+    background-color: #EFEFEF !important;
+}

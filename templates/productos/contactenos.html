@@ -1,0 +1,45 @@
+{% extends "../base.html" %} 
+{% load static %} 
+{% load crispy_forms_tags %}
+{% block stylesheet %}
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'js/categoria.js' %}">  </script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock  %}
+{% block title %} 
+    Contactenos
+{% endblock %} 
+{% block content %}
+<h2 class="text-center">Contatecnos</h2>
+<br>
+<hr>
+<div class="row">
+<div class="col-md-6">
+ <form method="post" action="{% url 'tienda:contactenos' %}" enctype="multipart/form-data">
+{% csrf_token %}
+ {{form|crispy}}
+ <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+</div>
+<div class="col-md-6"> 
+<h3>Informacion De Contacto</h3>
+
+        <div class="">
+        <!-- 
+        <h2 class="text-uppercase mt-4 font-weight-bold">dove siamo</h2>
+-->
+        <i class="fas fa-phone mt-3"></i> <a href="tel:+">(+39) 123456</a><br>
+        <i class="fa fa-envelope mt-3"></i> <a href="">correo@correo</a><br>
+        <i class="fas fa-globe mt-3"></i> Piazza del Colosseo, 1, 00184 Roma<br>
+        
+        <div class="my-4">
+        <a href=""><i class="fab fa-facebook fa-3x pr-4"></i></a>
+        <a href=""><i class="fab fa-linkedin fa-3x"></i></a>
+        <a href=""><i class="fab fa-github-square fa-3x"></i></a>
+        <a href=""><i class="fab fa-linkedin fa-3x"></i></a>
+        </div>
+</div>
+</div>
+
+{% endblock %}

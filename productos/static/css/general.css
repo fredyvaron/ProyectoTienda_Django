@@ -1,0 +1,40 @@
+.alinear_izquierdo {
+    text-align: left;
+}
+
+.rankink_puntaje {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.rankink_puntaje>p {
+    margin-bottom: 0.5rem;
+}
+
+.fecha_creacion {
+    margin-top: 2px;
+}
+
+.likeanddeslike {
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+}
+
+.start-ranking {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+}
+
+.user-ranking {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+}
+
+.content {
+    padding-left: 2rem;
+    font-size: 18px
+}

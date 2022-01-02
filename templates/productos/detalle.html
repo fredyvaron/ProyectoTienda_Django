@@ -1,0 +1,386 @@
+{% extends "../base.html" %} {% load static %} {% load humanize%} {% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/cuenta/perfil.css' %}">{% endblock %} {% block javascript %}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %} {% block title %} {% if producto %}{{ producto.name }}{% else %}Producto{% endif %} {% endblock %} {% block content %}
+<div class="container">
+    <div class="row g-3">
+        <div class="col-md-5 ps-3 col-lg-5 order-md-last p-0 order-1">
+            <div class="d-grid gap-2">
+                <div class="d-flex d-flex-inline justify-content-between">
+                    <hr>
+                    <div>
+                        {{ producto.descripcion }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-5 ps-3 col-lg-5 order-md-last p-0 order-1">
+            <div class="d-grid gap-2">
+                <div class="d-flex d-flex-inline justify-content-between">
+                    <div><span class="h3">$ {{ producto.price|intcomma }}</span>
+                        <p class="text-muted">
+                            <!--includes tax-->
+                        </p>
+                    </div>
+                    <div>
+                        <label for="select">Cant</label>
+                        <select id="select" class="h6 store-select-dropdown">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+                    </div>
+
+
+                </div>
+                <hr>
+                <a class="btn btn-success fw500" href="{% url 'carro:cart_add' producto.id %}">Agregar al Carrito</a>
+
+                <button type="button" id="add-button" value="{{producto.id}}" class="btn btn-light fw500">Add to
+          Favorites</button>
+            </div>
+        </div>
+        <div class="col-md-7 col-lg-7 p-0">
+            <div class="card mb-3 border-0">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-body p-1">
+                            <h1 class="mb-0 h2 pe-4 pb-4">{{ producto.name }}</h1>
+                            <div class="bg-light"><img class="img-fluid mx-auto d-block" width="200px" alt="Responsive image" src="{{ producto.image.url }}"> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    
+    <div class="p-5 bg-white rounded shadow mb-5">
+        <ul class="nav nav-tabs nav-pills flex-column flex-sm-row text-center bg-light border-0 rounded-nav" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Detalles</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Reseñas <span class="badge bg-secondary">{{ review.count }}</span> </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Fabricante</button>
+            </li>
+        </ul>
+        <div class="tab-content " id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">{{ producto.descripcion }}</div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+                <div class="container-fluid px-1 py-5 mx-auto">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-7 col-lg-8 col-md-10 col-12 text-center mb-5">
+                            <div class="card">
+                                <div class="row justify-content-left d-flex">
+                                    {% if messages %} {% for message in messages %}
+                                    <div class="alert alert-{{message.tags}}" roles="alert">
+                                        {{ message }}
+                                    </div>
+                                    {% endfor %} {% endif %}
+
+                                    <form action="" method="post" id="post-form">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <div class="rating">
+
+                                                <!-- Rating Stars Box -->
+                                                <section class='rating-widget'>
+
+                                                    <!-- Rating Stars Box -->
+                                                    <div class='rating-stars text-center'>
+                                                        <ul id='stars'>
+                                                            <li class='star star_ranking ' title='Poor' data-value='1'>
+                                                                <i class='fa fa-star fa-fw'></i>
+                                                            </li>
+                                                            <li class='star star_ranking ' title='Fair' data-value='2'>
+                                                                <i class='fa fa-star fa-fw'></i>
+                                                            </li>
+                                                            <li class='star star_rankin' title='Good' data-value='3'>
+                                                                <i class='fa fa-star fa-fw'></i>
+                                                            </li>
+                                                            <li class='star star_ranking' title='Excellent' data-value='4'>
+                                                                <i class='fa fa-star fa-fw'></i>
+                                                            </li>
+                                                            <li class='star star_ranking' title='WOW!!!' data-value='5'>
+                                                                <i class='fa fa-star fa-fw'></i>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </section>
+                                                <label for="exampleFormControlTextarea1" class="form-label">Comentario</label>
+                                                <textarea class="form-control" placeholder="Escriba Su Comentario" id="contenido" name="contenido" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        {% if user.is_authenticated %}
+                                        <button type="submit" class="btn btn-primary">Enviar</button> {% else %} Para Enviar Review Debe Estar Logueado {% endif %}
+
+                                    </form>
+                                    <br>
+                                    </br>
+                                </div>
+                            </div>
+
+                            {% if review %}
+
+                            <div class="card">
+                                <hr>
+                                <div class="message">
+
+                                </div>
+                                <div class="row justify-content-left d-flex">
+                                    <div class="col-md-4 d-flex flex-column">
+                                        <div class="rating-box">
+
+                                            <h1 class="pt-4">{{review_con.ranking__avg|floatformat:1}}</h1>
+                                            <p class="">De 1 a 5</p>
+
+                                        </div>
+                                        <div>
+                                            <span class="far fa-star clase_star {% if review_con.ranking__avg >= 1 %}checked_stars{% endif %}"></span>
+                                            <span class="far fa-star clase_star {% if review_con.ranking__avg >= 2 %}checked_stars{% endif %}"></span>
+                                            <span class="far fa-star clase_star {% if review_con.ranking__avg >= 3 %}checked_stars{% endif %}"></span>
+                                            <span class="far fa-star clase_star {% if review_con.ranking__avg >= 4 %}checked_stars{% endif %}"></span>
+                                            <span class="far fa-star clase_star {% if review_con.ranking__avg >= 5 %}checked_stars{% endif %}"></span> </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="rating-bar0 justify-content-center">
+                                            <table class="text-left mx-auto">
+                                                <tr>
+                                                    <td class="rating-label">
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                    </td>
+                                                    <td class="rating-bar">
+                                                        <div class="bar-container">
+                                                            <div class="bar-5"></div>
+                                                        </div>
+                                                    </td>
+
+
+
+                                                    <td class="text-right">{{review_five.count}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="rating-label">
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                    </td>
+                                                    <td class="rating-bar">
+                                                        <div class="bar-container">
+                                                            <div class="bar-4"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right">{{review_four.count}}</td>
+                                                </tr>
+                                                <tr>
+
+                                                    <td class="rating-label">
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                    </td>
+                                                    <td class="rating-bar">
+                                                        <div class="bar-container">
+                                                            <div class="bar-3"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right">{{review_three.count}}</td>
+                                                </tr>
+                                                <tr>
+
+                                                    <td class="rating-label">
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                    </td>
+                                                    <td class="rating-bar">
+                                                        <div class="bar-container">
+                                                            <div class="bar-2"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right">{{review_two.count}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="rating-label">
+                                                        <span class="far fa-star clase_star checked_stars"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                        <span class="far fa-star clase_star"></span>
+                                                    </td>
+                                                    <td class="rating-bar">
+                                                        <div class="bar-container">
+                                                            <div class="bar-1"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right">{{review_one.count}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% endif %}
+                                <br>
+                                <hr> {% for review in review %}
+
+                                <div class="card alinear_izquierdo">
+                                    <div class="row d-flex">
+
+                                        <div class="d-flex flex-column">
+
+
+                                            <div class="reviews-star-user">
+                                                <div class="ranking_user">
+                                                    {% if review.user.profile.avatar %}
+                                                    <img src="{{ review.user.profile.avatar.url }}" alt="" class="img-circle1 profile-avatar1"> {% else %}
+                                                    <img src="{% static 'img/no_avatar.jpg' %}" alt="" class="circle1"> {% endif %} {% for perfi in perfil %} {% if review.user == perfi.usuario %}
+                                                    <div class=""> <img class="img-circle1 profile-avatar1" src="{{perfi.avatar.url}}"> </div>
+
+                                                    {% endif %} {% endfor %}
+                                                </div>
+
+                                                <div class="rankink_puntaje">
+                                                    <p class="text-left">
+
+                                                        <div class="user-ranking">
+                                                            <span class="text-muted">{{ review.user }}</span>
+                                                        </div>
+
+                                                        <div class="start-ranking">
+                                                            <span class="far fa-star clase_star {% if review.ranking >= 1 %}checked_stars{% endif %}"></span>
+                                                            <span class="far fa-star clase_star {% if review.ranking >= 2 %}checked_stars{% endif %}"></span>
+                                                            <span class="far fa-star clase_star {% if review.ranking >= 3 %}checked_stars{% endif %}"></span>
+                                                            <span class="far fa-star clase_star {% if review.ranking >= 4 %}checked_stars{% endif %}"></span>
+                                                            <span class="far fa-star clase_star {% if review.ranking >= 5 %}checked_stars{% endif %}"></span>
+                                                        </div>
+                                                    </p>
+
+                                                    <div class="fecha_creacion">
+                                                        {{review.creado}}
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row text-left">
+                                        <!--
+                                    <h4 class="blue-text mt-3">"An awesome activity to experience"</h4>
+                                    -->
+                                        <p class="content">{{ review.contenido }}</p>
+                                    </div>
+                                    <!--
+                                <div class="row text-left"> <img class="pic" src="https://i.imgur.com/kjcZcfv.jpg"> <img class="pic" src="https://i.imgur.com/SjBwAgs.jpg"> <img class="pic" src="https://i.imgur.com/IgHpsBh.jpg"> </div>
+                                -->
+                                    <div class="likeanddeslike">
+                                        <div class="upvote">
+                                            <strong class="upvote-count-{{review.id}}">{{review.upvote_set.count}}</strong><br/>
+                                            <span class="text-success">
+                                                <i class="far fa-thumbs-up fa-2x upvote-click" data-comentario="{{review.id}}"></i>
+                                            </span>
+                                        </div>
+                                        <div class="downvote mt-3">
+                                            <span class="text-success">
+                                                <i class="far fa-thumbs-down fa-2x downvote-click" data-comentario="{{review.id}}"></i>
+                                            </span><br/>
+                                            <strong class="downvote-count-{{review.id}}">{{review.downvote_set.count}}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %} No Hay Review {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // Upvote
+            $(".upvote-click").on("click", function() {
+                var commentarioid = $(this).data("comentario");
+                console.log(commentarioid)
+                    // Ajax
+                $.ajax({
+                    url: '/save-upvotes',
+                    type: "POST",
+                    data: {
+                        comentarioid: commentarioid,
+                        'csrfmiddlewaretoken': '{{csrf_token}}',
+                    },
+                    dataType: "json",
+                    success: function(res) {
+                        var _prevupvote = $(".upvote-count-" + commentarioid).text();
+                        var _prevupvote2 = $(".downvote-count-" + commentarioid).text();
+
+                        if (res.bool == true) {
+                            $(".upvote-count-" + commentarioid).text(parseInt(_prevupvote) + 1);
+                        }
+                        if (res.bool2 == false) {
+                            $(".downvote-count-" + commentarioid).text(parseInt(_prevupvote2) - 1)
+                        }
+                        if (res.bool == false) {
+                            $(".upvote-count-" + commentarioid).text(parseInt(_prevupvote) - 1);
+                        }
+                    },
+                });
+            });
+
+            // Downvote
+            $(".downvote-click").on("click", function() {
+
+                var commentarioid = $(this).data("comentario");
+                console.log(commentarioid)
+                    // Ajax
+                $.ajax({
+                    url: "/save-downvote",
+                    type: "POST",
+                    data: {
+                        comentarioid: commentarioid,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    },
+                    dataType: "json",
+                    success: function(res) {
+                        var _prevupvote = $(".downvote-count-" + commentarioid).text();
+                        var _prevupvote2 = $(".upvote-count-" + commentarioid).text();
+                        console.log(res)
+                        if (res.bool == true) {
+                            $(".downvote-count-" + commentarioid).text(parseInt(_prevupvote) + 1);
+                        }
+                        if (res.bool2 == false) {
+                            $(".upvote-count-" + commentarioid).text(parseInt(_prevupvote2) - 1);
+                        }
+                        if (res.bool == false) {
+                            $(".downvote-count-" + commentarioid).text(parseInt(_prevupvote) - 1);
+                        }
+                    },
+                });
+            });
+        });
+    </script>
+    {% endblock %}

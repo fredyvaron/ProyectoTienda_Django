@@ -1,0 +1,34 @@
+{% extends "../base.html" %} 
+{% load static %} 
+{% block stylesheet %}
+{% endblock %}
+{% block title %} 
+    Crear Producto
+{% endblock %} 
+{% block content %}
+{% load crispy_forms_tags %}
+{% if form.errors %}
+error
+{% endif %}
+{{err}}
+ <form method="post" action="{% url 'producto:new_producto' %}" enctype="multipart/form-data">
+{% csrf_token %}
+ {{form|crispy}}
+ <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+{{prueba}}
+{% endblock %}

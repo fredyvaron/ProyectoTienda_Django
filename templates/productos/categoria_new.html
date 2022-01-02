@@ -1,0 +1,70 @@
+{% extends "../base.html" %} {% load static %} {% block stylesheet %} {% endblock %} {% block javascript %}
+<script src="{% static 'js/categoria.js' %}">
+</script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %} {% block title %} Categoria {% endblock %}
+<!-- Button trigger modal -->
+
+
+{% block content %}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoriaModal">
+  Crear Categoria
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="categoriaModal" tabindex="-1" aria-labelledby="categoriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="categoriaModalLabel">Formulario Categoria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" id="categoria-create-form">
+                    {% csrf_token %}
+                    <!-- Nombre input -->
+                    <div class="form-floating">
+                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ingrese Un Nombre" />
+                        <label for="nombre">Nombre</label>
+                    </div>
+
+                    <!-- Password input -->
+                    <br>
+                    <div class="form-floating">
+                        <input type="file" class="form-select form-control" id="image" name="image" aria-label="Floating label select example" />
+                        <label for="image">Imagen</label>
+                    </div>
+
+                    <br>
+                    <!--Slug input -->
+                    <div class="form-floating">
+                        <input type="text" id="slug" name="slug" class="form-control" placeholder="Ingrese Slug" />
+                        <label for="slug">Slug</label>
+                    </div>
+                    <br>
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block">Crear Categoria</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+</br>
+<div class="card-group">
+
+    <div class="row">
+        {% for categor in categoria %}
+        <div class="col-12 col-md-3 col-sm-6">
+            <div class="card mb-4" style="width: 18rem;">
+                <a class="text-decoration-none" href="{% url 'producto:detalle_categoria' categor.id %}">
+                    <h1>{{categor.nombre}}</h1>
+                    <img class="card-img-top" style="height: 200px;" alt="Responsive image" src="{{ categor.image.url }}">
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

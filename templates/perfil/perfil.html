@@ -1,0 +1,113 @@
+{% extends "../base.html" %} {% load static %} {% load crispy_forms_tags %} {% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/cuenta/perfil.css' %}"> {% endblock %} {% block javascript %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/perfil/perfil.js' %}"></script>
+{% endblock %} {% block title %} Perfil {% endblock %} {% block content %}
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{perfil.usuario}}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <div class="avatar">
+                            <img class="img-circle profile-avatar" alt="Responsive image" src="{{ perfil.avatar.url }}">
+                        </div>
+                    </h6>
+                    <p class="card-text">
+                        <p>Fecha Cumpleaños {{perfil.fecha_cumpleaños}}</p>
+                        <p> Genero {{perfil.genero}}</p>
+                        <p> Telefono {{perfil.telefono}}</p>
+
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6 col-12">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Actualizar Perfil
+        </button>
+
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Actualizar Perfil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="post" action="{% url 'cuenta:perfil_de_usuario' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="modal-body">
+                                {{form|crispy}}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+
+
+                    <div class="tabs">
+                        <div class="tabs_header">
+                            <div class="link_tabs_perfil active">Review</div>
+                            <div class="link_tabs_perfil">Home</div>
+                            <div class="link_tabs_perfil">Review</div>
+                        </div>
+                        <div class="tabs_body">
+                            <div class="tabs_info_body active">
+                                <h1>Review</h1>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit culpa vero quasi quia ab quam laboriosam temporibus dignissimos architecto consequatur ut pariatur, harum, labore soluta ex fuga. Optio, itaque reprehenderit!</p>
+                            </div>
+                            <div class="tabs_info_body">
+                                <h1>Compras</h1>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit culpa vero quasi quia ab quam laboriosam temporibus dignissimos architecto consequatur ut pariatur, harum, labore soluta ex fuga. Optio, itaque reprehenderit!</p>
+                            </div>
+                            <div class="tabs_info_body">
+                                <h1>Compras</h1>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit culpa vero quasi quia ab quam laboriosam temporibus dignissimos architecto consequatur ut pariatur, harum, labore soluta ex fuga. Optio, itaque reprehenderit!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav nav-pills nav-fill navtop nav-perfil-contenedor " id="pills-tab " role="tablist ">
+                <li class="nav-item " role="presentation ">
+                    <button class="nav-link nav-perfil active " id="pills-home-tab " data-bs-toggle="pill " data-bs-target="#pills-home " type="button " role="tab " aria-controls="pills-home " aria-selected="true ">Home</button>
+                </li>
+                <li class="nav-item " role="presentation ">
+                    <button class="nav-link nav-perfil " id="pills-profile-tab " data-bs-toggle="pill " data-bs-target="#pills-profile " type="button " role="tab " aria-controls="pills-profile " aria-selected="false ">Profile</button>
+                </li>
+                <li class="nav-item " role="presentation ">
+                    <button class="nav-link nav-perfil " id="pills-contact-tab " data-bs-toggle="pill " data-bs-target="#pills-contact " type="button " role="tab " aria-controls="pills-contact " aria-selected="false ">Contact</button>
+                </li>
+            </ul>
+            <div class="tab-content " id="pills-tabContent ">
+                <div class="tab-pane fade show active " id="pills-home " role="tabpanel " aria-labelledby="pills-home-tab ">...</div>
+                <div class="tab-pane fade " id="pills-profile " role="tabpanel " aria-labelledby="pills-profile-tab ">...</div>
+                <div class="tab-pane fade " id="pills-contact " role="tabpanel " aria-labelledby="pills-contact-tab ">...</div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
